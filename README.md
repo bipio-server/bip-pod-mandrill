@@ -1,7 +1,7 @@
 ![mandrill](mandrill.png) bip-pod-mandrill
 =======
 
-<a href="http://en.wikipedia.org/wiki/mandrill_(text)">mandrill</a> pod for [bipio](https://bip.io).  
+<a href="http://mandrill.com">mandrill</a> pod for [bipio](https://bip.io).  
 
 ## Installation
 
@@ -29,4 +29,4 @@ If you'd like to integrate BipIO with your proprietary system, GPLv3 is likely i
 please [reach us](mailto:support@beta.bip.io)
 
 
-Copyright (c) 2010-2014  [Michael Pearson](https://github.com/mjpearson)
+Copyright (c) 2014  [WoTio](http://wot.io)
