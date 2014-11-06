@@ -1,10 +1,7 @@
 /**
  *
- * The Bipio Send Pod.  mandrill sample action definition
- * ---------------------------------------------------------------
- *
- * @author Scott Tuddenham <scott@bip.io>
- * Copyright (c) 2014 WoT.io http://wot.io
+ * @author Michael Pearson <michael@bip.io>
+ * Copyright (c) 2010-2014 WoT.IO
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,86 +17,159 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// @see https://mandrillapp.com/api/docs/messages.JSON.html
+var Q = require('q');
+
 function Send(podConfig) {
-  this.name = 'send'; // action name (channel action suffix - "action: mandrill.send")
-  this.title = 'short description', // short description
-  this.description = 'the long description', // long description
-  this.trigger = false; // this action can trigger
-  this.singleton = false; // 1 instance per account (can auto install)
-  this.auto = false; // automatically install this action
-  this.podConfig = podConfig; // general system level config for this pod (transports etc)
+  this.name = 'send';
+  this.title = 'Send an Email';
+  this.description = 'Send an Email';
+  this.trigger = false;
+  this.singleton = false;
+  this.auto = false;
+  this.podConfig = podConfig;
 }
 
 Send.prototype = {};
 
-// Send schema definition
-// @see http://json-schema.org/
 Send.prototype.getSchema = function() {
   return {
     "config": {
       "properties" : {
-        "instring_override" : {
+        "from_email" : {
           "type" :  "string",
-          "description" : "String goes in"
+          "description" : "Default From Address"
+        },
+        "from_name" : {
+          "type" :  "string",
+          "description" : "From Name"
         }
-      }
+      },
+      "required" : [ "from_email" ]
     },
     "imports": {
       "properties" : {
-        "instring" : {
+        "to_email" : {
           "type" :  "string",
-          "description" : "String goes in"
+          "description" : "To Address"
+        },
+        "cc_address" : {
+          "type" :  "string",
+          "description" : "Cc (space separated)"
+        },
+        "bcc_address" : {
+          "type" :  "string",
+          "description" : "Bcc (space separated)"
+        },
+        "subject" : {
+          "type" :  "string",
+          "description" : "Subject"
+        },
+        "text" : {
+          "type" :  "string",
+          "description" : "Text"
+        },
+        "html" : {
+          "type" :  "string",
+          "description" : "HTML"
         }
-      }
+      },
+      "required" : [ "from_email", "to_email" ]
     },
     "exports": {
       "properties" : {
-        "outstring" : {
-          "type" : "string",
-          "description" : "String goes out"
+        "email" : {
+          "type" :  "string",
+          "description" : "Email Address"
+        },
+        "status" : {
+          "type" :  "string",
+          "description" : "Status"
+        },
+        "_id" : {
+          "type" :  "string",
+          "description" : "Message ID"
+        },
+        "reject_reason" : {
+          "type" :  "string",
+          "description" : "Rejection Reason"
         }
       }
-    },
-    'renderers' : {
-      'hello' : {
-        description : 'Hello World',
-        description_long : 'Hello World',
-        contentType : DEFS.CONTENTTYPE_XML
-      }     
     }
   }
 }
 
-// RPC/Renderer accessor - /rpc/render/channel/{channel id}/hello
-Send.prototype.rpc = function(method, sysImports, options, channel, req, res) {
-  if (method === 'hello') {
-    res.contentType(this.getSchema().renderers[method].contentType);
-    res.send('world');
-  } else {
-    res.send(404);
+function unpackAddresses(addrs, type, ptr) {
+  if (addrs) {
+    var addrs = addrs.split(' ');
+    for (var i = 0; i < addrs.length; i++) {
+      ptr.push({
+        type : type,
+        email : addrs[i].trim()
+      });
+    }
   }
 }
 
-/**
- * Action Invoker - the primary function of a channel
- * 
- * @param Object imports transformed key/value input pairs
- * @param Channel channel invoking channel model
- * @param Object sysImports
- * @param Array contentParts array of File Objects, key/value objects
- * with attributes txId (transaction ID), size (bytes size), localpath (local tmp file path)
- * name (file name), type (content-type), encoding ('binary') 
- * 
- * @param Function next callback(error, exports, contentParts, transferredBytes)
- * 
- */
+Send.prototype.send(struct, next) {
+  this.$resource._httpPost('https://mandrillapp.com/api/1.0/messages/send.json', struct, function(err, resp) {
+    next(err, resp);
+  });
+}
+
 Send.prototype.invoke = function(imports, channel, sysImports, contentParts, next) {
-  next(
-    false,
-    {
-      "outstring" : channel.config.instring_override || imports.instring
+  var f,
+    struct = {
+      key : sysImports.auth.issuer_token.password,
+      message : {
+        html : imports.html,
+        text : imports.text,
+        subject : imports.subject,
+        from_email : channel.config.from_email,
+        from_name : channel.config.from_name,
+        to : [
+          {
+            email : imports.to_email,
+            type : "to"
+          }
+        ]
+      }
     }
-    );
+
+  unpackAddresses(imports.cc_address, 'cc', struct.message.to);
+  unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
+
+  this.send(struct, next);
+/*
+ * @todo - pending cdn strategy (0.3 sansa)
+  if (contentParts._files.length) {
+    var promises = [],
+      deferred;
+
+    struct.message.attachments = [];
+    struct.message.images = [];
+
+    for (var i = 0; i < contentParts._files.length; i++) {
+      deferred = Q.defer();
+      promises.push(deferred.promise);
+
+      if (0 === f.indexOf('image/')) {
+        (function(file, deferred) {
+
+        })(contentParts._files[i], deferred);
+      }
+    }
+
+    Q.all(promises).then(function() {
+
+    });
+
+  } else {
+    this.send(struct, next);
+  }
+*/
+
+
 }
 
 // -----------------------------------------------------------------------------
