@@ -111,7 +111,7 @@ function unpackAddresses(addrs, type, ptr) {
   }
 }
 
-Send.prototype.send(struct, next) {
+Send.prototype.send = function(struct, next) {
   this.$resource._httpPost('https://mandrillapp.com/api/1.0/messages/send.json', struct, function(err, resp) {
     next(err, resp);
   });
