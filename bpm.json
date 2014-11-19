@@ -1,0 +1,99 @@
+{
+  "name": "mandrill",
+  "title": "Mandrill",
+  "description": "<a href=\"https://mandrill.com\" target=\"_blank\">Mandrill</a> is a transactional email platform from MailChimp",
+  "url": "",
+  "trackDuplicates": false,
+  "config": {},
+  "auth": {
+    "strategy": "issuer_token"
+  },
+  "rpcs": {},
+  "actions": {
+    "send": {
+      "title": "Send an Email",
+      "description": "Send an Email",
+      "trigger": "invoke",
+      "config": {
+        "properties": {
+          "from_email": {
+            "type": "string",
+            "description": "Default From Address"
+          },
+          "from_name": {
+            "type": "string",
+            "description": "From Name"
+          }
+        },
+        "required": [
+          "from_email"
+        ],
+        "disposition": [
+          "from_email",
+          "from_name"
+        ]
+      },
+      "exports": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "Email Address"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status"
+          },
+          "_id": {
+            "type": "string",
+            "description": "Message ID"
+          },
+          "reject_reason": {
+            "type": "string",
+            "description": "Rejection Reason"
+          }
+        }
+      },
+      "imports": {
+        "properties": {
+          "to_email": {
+            "type": "string",
+            "description": "To Address"
+          },
+          "cc_address": {
+            "type": "string",
+            "description": "Cc (space separated)"
+          },
+          "bcc_address": {
+            "type": "string",
+            "description": "Bcc (space separated)"
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text"
+          },
+          "html": {
+            "type": "string",
+            "description": "HTML"
+          }
+        },
+        "required": [
+          "from_email",
+          "to_email"
+        ],
+        "disposition": [
+          "from_email",
+          "to_email",
+          "cc_address",
+          "bcc_address",
+          "subject",
+          "text",
+          "html"
+        ]
+      }
+    }
+  }
+}

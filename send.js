@@ -119,6 +119,8 @@ Send.prototype.send = function(struct, next) {
 
 Send.prototype.invoke = function(imports, channel, sysImports, contentParts, next) {
   var f,
+    self = this,
+    $resource = this.$resource,
     struct = {
       key : sysImports.auth.issuer_token.password,
       message : {
@@ -140,8 +142,7 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
   unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
 
   this.send(struct, next);
-/*
- * @todo - pending cdn strategy (0.3 sansa)
+
   if (contentParts._files.length) {
     var promises = [],
       deferred;
@@ -153,11 +154,13 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
       deferred = Q.defer();
       promises.push(deferred.promise);
 
-      if (0 === f.indexOf('image/')) {
-        (function(file, deferred) {
+      (function(file, deferred) {
 
-        })(contentParts._files[i], deferred);
-      }
+      })(contentParts._files[i], deferred);
+
+//      if (0 === f.indexOf('image/')) {
+
+//      }
     }
 
     Q.all(promises).then(function() {
@@ -167,7 +170,7 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
   } else {
     this.send(struct, next);
   }
-*/
+
 
 
 }
