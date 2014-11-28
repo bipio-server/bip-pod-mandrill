@@ -1,8 +1,8 @@
 {
   "name": "mandrill",
   "title": "Mandrill",
-  "description": "<a href=\"https://mandrill.com\" target=\"_blank\">Mandrill</a> is a transactional email platform from MailChimp",
-  "url": "",
+  "description": "Mandrill is a transactional email platform from MailChimp",
+  "url": "https://mandrill.com",
   "trackDuplicates": false,
   "config": {},
   "auth": {
@@ -13,6 +13,7 @@
     "send": {
       "title": "Send an Email",
       "description": "Send an Email",
+      "doc_ref" : "https://mandrillapp.com/api/docs/messages.JSON.html",
       "trigger": "invoke",
       "config": {
         "properties": {

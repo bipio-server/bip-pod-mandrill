@@ -19,18 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 var Pod = require('bip-pod'),
-    Mandrill = new Pod({
-      name : 'mandrill',
-      title : 'Mandrill',
-      description : '<a href="https://mandrill.com" target="_blank">Mandrill</a> is a transactional email platform from MailChimp',
-      authType : 'issuer_token',
-      authMap : {
-        password : 'API Key'
-      }
-    });
-
-// Include any actions
-Mandrill.add(require('./send.js'));
+    Mandrill = new Pod();
 
 // -----------------------------------------------------------------------------
 module.exports = Mandrill;

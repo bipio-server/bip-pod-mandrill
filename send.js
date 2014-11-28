@@ -21,83 +21,9 @@
 var Q = require('q');
 
 function Send(podConfig) {
-  this.name = 'send';
-  this.title = 'Send an Email';
-  this.description = 'Send an Email';
-  this.trigger = false;
-  this.singleton = false;
-  this.auto = false;
-  this.podConfig = podConfig;
 }
 
 Send.prototype = {};
-
-Send.prototype.getSchema = function() {
-  return {
-    "config": {
-      "properties" : {
-        "from_email" : {
-          "type" :  "string",
-          "description" : "Default From Address"
-        },
-        "from_name" : {
-          "type" :  "string",
-          "description" : "From Name"
-        }
-      },
-      "required" : [ "from_email" ]
-    },
-    "imports": {
-      "properties" : {
-        "to_email" : {
-          "type" :  "string",
-          "description" : "To Address"
-        },
-        "cc_address" : {
-          "type" :  "string",
-          "description" : "Cc (space separated)"
-        },
-        "bcc_address" : {
-          "type" :  "string",
-          "description" : "Bcc (space separated)"
-        },
-        "subject" : {
-          "type" :  "string",
-          "description" : "Subject"
-        },
-        "text" : {
-          "type" :  "string",
-          "description" : "Text"
-        },
-        "html" : {
-          "type" :  "string",
-          "description" : "HTML"
-        }
-      },
-      "required" : [ "from_email", "to_email" ]
-    },
-    "exports": {
-      "properties" : {
-        "email" : {
-          "type" :  "string",
-          "description" : "Email Address"
-        },
-        "status" : {
-          "type" :  "string",
-          "description" : "Status"
-        },
-        "_id" : {
-          "type" :  "string",
-          "description" : "Message ID"
-        },
-        "reject_reason" : {
-          "type" :  "string",
-          "description" : "Rejection Reason"
-        }
-      }
-    }
-  }
-}
 
 function unpackAddresses(addrs, type, ptr) {
   if (addrs) {
@@ -143,7 +69,8 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
 
   this.send(struct, next);
 
-  if (contentParts._files.length) {
+  // @todo file uploads
+  if (false && contentParts._files.length) {
     var promises = [],
       deferred;
 
@@ -157,10 +84,6 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
       (function(file, deferred) {
 
       })(contentParts._files[i], deferred);
-
-//      if (0 === f.indexOf('image/')) {
-
-//      }
     }
 
     Q.all(promises).then(function() {
