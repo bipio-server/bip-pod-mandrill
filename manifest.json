@@ -6,7 +6,13 @@
   "trackDuplicates": false,
   "config": {},
   "auth": {
-    "strategy": "issuer_token"
+    "strategy": "issuer_token",
+    "properties" : {
+      "password" : {
+        "type" : "string",
+        "title" : "API Key"
+      }
+    }
   },
   "rpcs": {},
   "actions": {
