@@ -7,10 +7,10 @@
   "config": {},
   "auth": {
     "strategy": "issuer_token",
-    "properties" : {
-      "password" : {
-        "type" : "string",
-        "title" : "API Key"
+    "properties": {
+      "password": {
+        "type": "string",
+        "title": "API Key"
       }
     }
   },
@@ -19,17 +19,17 @@
     "send": {
       "title": "Send an Email",
       "description": "Send an Email",
-      "doc_ref" : "https://mandrillapp.com/api/docs/messages.JSON.html",
+      "doc_ref": "https://mandrillapp.com/api/docs/messages.JSON.html",
       "trigger": "invoke",
       "config": {
         "properties": {
           "from_email": {
             "type": "string",
-            "description": "Default From Address"
+            "title": "Default From Address"
           },
           "from_name": {
             "type": "string",
-            "description": "From Name"
+            "title": "From Name"
           }
         },
         "required": [
@@ -44,19 +44,19 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "Email Address"
+            "title": "Email Address"
           },
           "status": {
             "type": "string",
-            "description": "Status"
+            "title": "Status"
           },
           "_id": {
             "type": "string",
-            "description": "Message ID"
+            "title": "Message ID"
           },
           "reject_reason": {
             "type": "string",
-            "description": "Rejection Reason"
+            "title": "Rejection Reason"
           }
         }
       },
@@ -64,27 +64,27 @@
         "properties": {
           "to_email": {
             "type": "string",
-            "description": "To Address"
+            "title": "To Address"
           },
           "cc_address": {
             "type": "string",
-            "description": "Cc (space separated)"
+            "title": "Cc (space separated)"
           },
           "bcc_address": {
             "type": "string",
-            "description": "Bcc (space separated)"
+            "title": "Bcc (space separated)"
           },
           "subject": {
             "type": "string",
-            "description": "Subject"
+            "title": "Subject"
           },
           "text": {
             "type": "string",
-            "description": "Text"
+            "title": "Text"
           },
           "html": {
             "type": "string",
-            "description": "HTML"
+            "title": "HTML"
           }
         },
         "required": [
