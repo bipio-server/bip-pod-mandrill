@@ -16,6 +16,106 @@
   },
   "rpcs": {},
   "actions": {
+		  "sendTemplate": {
+		      "title": "Send a Template Email",
+		      "description": "Send an Email using a predefined template",
+		      "doc_ref": "https://mandrillapp.com/api/docs/messages.JSON.html",
+		      "trigger": "invoke", 
+		      "config": {
+		        "properties": {
+		          "from_email": {
+		            "type": "string",
+		            "title": "Default From Address"
+		          },
+		          "from_name": {
+		            "type": "string",
+		            "title": "From Name"
+		          }
+		          ,
+		          "template_name": {
+		            "type": "string",
+		            "title": "Template Name"
+		          }
+		        },
+		        "required": [
+		          "from_email"
+		        ],
+		        "disposition": [
+		          "from_email",
+		          "from_name"
+		        ]
+		      },
+		      "exports": {
+		        "properties": {
+		          "email": {
+		            "type": "string",
+		            "title": "Email Address"
+		          },
+		          "status": {
+		            "type": "string",
+		            "title": "Status"
+		          },
+		          "_id": {
+		            "type": "string",
+		            "title": "Message ID"
+		          },
+		          "reject_reason": {
+		            "type": "string",
+		            "title": "Rejection Reason"
+		          }
+		        }
+		      },
+		      "imports": {
+		        "properties": {
+		          "to_email": {
+		            "type": "string",
+		            "title": "To Address"
+		          },
+		          "cc_address": {
+		            "type": "string",
+		            "title": "Cc (space separated)"
+		          },
+		          "bcc_address": {
+		            "type": "string",
+		            "title": "Bcc (space separated)"
+		          },
+		          "subject": {
+		            "type": "string",
+		            "title": "Subject"
+		          }
+		          ,
+		          "username": {
+		            "type": "string",
+		            "title": "Template username Variable"
+		          }
+		          ,
+		          "last_mame": {
+		            "type": "string",
+		            "title": "Template lastname Variable"
+		          }
+		          ,
+		          "email": {
+		            "type": "string",
+		            "title": "Template Email Variable"
+		          }
+		        },
+		        "required": [
+		          "from_email",
+		          "to_email",
+		          "subject"
+		        ],
+		        "disposition": [
+		          "from_email",
+		          "to_email",
+		          "subject",
+		          "username",
+		          "last_mame",
+		          "email",
+		          "cc_address",
+		          "bcc_address"
+		        ]
+		      }
+		    },
     "send": {
       "title": "Send an Email",
       "description": "Send an Email",
