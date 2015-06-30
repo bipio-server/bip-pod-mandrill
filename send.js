@@ -53,8 +53,8 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
         html : imports.html,
         text : imports.text,
         subject : imports.subject,
-        from_email : channel.config.from_email,
-        from_name : channel.config.from_name,
+        from_email : imports.from_email,
+        from_name : imports.from_name,
         to : [
           {
             email : imports.to_email,
@@ -68,6 +68,7 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
   unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
 
   this.send(struct, next);
+  return;
 
   // @todo file uploads
   if (false && contentParts._files.length) {

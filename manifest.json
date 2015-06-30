@@ -16,11 +16,11 @@
   },
   "rpcs": {},
   "actions": {
-		  "sendTemplate": {
+		  "send_template": {
 		      "title": "Send a Template Email",
 		      "description": "Send an Email using a predefined template",
 		      "doc_ref": "https://mandrillapp.com/api/docs/messages.JSON.html",
-		      "trigger": "invoke", 
+		      "trigger": "invoke",
 		      "config": {
 		        "properties": {
 		          "from_email": {

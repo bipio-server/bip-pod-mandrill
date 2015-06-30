@@ -1,7 +1,7 @@
 /**
  *
  * @author elie youssef <elie.youssef@elementn.com>
- * Copyright (c) 2010-2014 WoT.IO 
+ * Copyright (c) 2010-2014 WoT.IO
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
     $resource = this.$resource,
     struct = {
       key : sysImports.auth.issuer_token.password,
-      template_name: channel.config.template_name,
+      template_name: imports.template_name,
       template_content:[{
     	  name: imports.subject,
     	  content: ""
@@ -58,8 +58,8 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
       message : {
         html : "",
         subject : imports.subject,
-        from_email : channel.config.from_email,
-        from_name : channel.config.from_name,
+        from_email : imports.from_email,
+        from_name : imports.from_name,
         to : [{
             email : imports.to_email,
             type : "to"
@@ -86,34 +86,6 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
   unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
 
   this.send(struct, next);
-
-  // @todo file uploads
-  if (false && contentParts._files.length) {
-    var promises = [],
-      deferred;
-
-    struct.message.attachments = [];
-    struct.message.images = [];
-
-    for (var i = 0; i < contentParts._files.length; i++) {
-      deferred = Q.defer();
-      promises.push(deferred.promise);
-
-      (function(file, deferred) {
-
-      })(contentParts._files[i], deferred);
-    }
-
-    Q.all(promises).then(function() {
-
-    });
-
-  } else {
-    this.send(struct, next);
-  }
-
-
-
 }
 
 // -----------------------------------------------------------------------------
