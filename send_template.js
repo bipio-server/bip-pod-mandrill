@@ -19,13 +19,15 @@
 
 // @see https://mandrillapp.com/api/docs/messages.JSON.html#method=send-template
 
-var Q = require('q');
+var csv = require('csv');
 
 function SendTemplate(podConfig) {
 }
 
 SendTemplate.prototype = {};
 
+/*
+ * disabled - now UI for cc/bcc merge_vers mapping
 function unpackAddresses(addrs, type, ptr) {
   if (addrs) {
     var addrs = addrs.split(' ');
@@ -37,7 +39,7 @@ function unpackAddresses(addrs, type, ptr) {
     }
   }
 }
-
+*/
 SendTemplate.prototype.send = function(struct, next) {
   this.$resource._httpPost('https://mandrillapp.com/api/1.0/messages/send-template.json', struct, function(err, resp) {
     next(err, resp);
@@ -57,35 +59,53 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
     		  }],
       message : {
         html : "",
+        merge_language : imports.merge_language,
+        global_merge_vars:[],
         subject : imports.subject,
         from_email : imports.from_email,
         from_name : imports.from_name,
-        to : [{
+        to : [
+          {
             email : imports.to_email,
             type : "to"
-          }],
-        merge_vars:[{
-        	rcpt: imports.to_email,
-        	vars: [{
-                name: "username",
-                content: imports.username
-            },
-            {
-                name : "lastname",
-                content : imports.last_mame
-            },
-            {
-                name: "email",
-                content: imports.email
-            }]
-        }]
+          }
+        ]
       }
     };
 
-  unpackAddresses(imports.cc_address, 'cc', struct.message.to);
-  unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
+  //unpackAddresses(imports.cc_address, 'cc', struct.message.to);
+  //unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
 
-  this.send(struct, next);
+  if (imports.merge_vars) {
+
+    csv.parse(imports.merge_vars, function(err, data) {
+      if (err) {
+        next(err);
+      } else {
+        var tokens, key, value;
+        for (var i = 0; i < data[0].length; i++) {
+          tokens = data[0][i].split('=');
+          key = tokens.shift();
+          value = tokens.join('=');
+
+          struct.message.global_merge_vars.push(
+            {
+              name : key,
+              content : value
+            }
+          );
+        }
+
+//        console.log(struct.message.global_merge_vars);
+
+        self.send(struct, next);
+      }
+    })
+
+  } else {
+    this.send(struct, next);
+  }
+
 }
 
 // -----------------------------------------------------------------------------

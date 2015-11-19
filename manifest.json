@@ -35,14 +35,28 @@
 		          "template_name": {
 		            "type": "string",
 		            "title": "Template Name"
-		          }
+		          },
+              "merge_language" : {
+                "type" : "string",
+                "title" : "Merge Language",
+                "oneOf" : [
+                  {
+                    "$ref" : "#/imports/definitions/merge_language"
+                  }
+                ]
+              }
 		        },
 		        "required": [
-		          "from_email"
+              "from_email",
+              "from_name",
+              "template_name",
+              "merge_language"
 		        ],
 		        "disposition": [
 		          "from_email",
-		          "from_name"
+		          "from_name",
+              "template_name",
+              "merge_language"
 		        ]
 		      },
 		      "exports": {
@@ -71,49 +85,50 @@
 		            "type": "string",
 		            "title": "To Address"
 		          },
-		          "cc_address": {
-		            "type": "string",
-		            "title": "Cc (space separated)"
-		          },
-		          "bcc_address": {
-		            "type": "string",
-		            "title": "Bcc (space separated)"
-		          },
 		          "subject": {
 		            "type": "string",
 		            "title": "Subject"
-		          }
-		          ,
-		          "username": {
+		          },
+		          "merge_vars": {
 		            "type": "string",
-		            "title": "Template username Variable"
-		          }
-		          ,
-		          "last_mame": {
-		            "type": "string",
-		            "title": "Template lastname Variable"
-		          }
-		          ,
-		          "email": {
-		            "type": "string",
-		            "title": "Template Email Variable"
-		          }
+		            "title": "Merge Variables",
+                "description" : "Comma Separated, eg: name=joe,company=big-co"
+		          },
+              "merge_language" : {
+                "type" : "string",
+                "title" : "Merge Language",
+                "oneOf" : [
+                  {
+                    "$ref" : "#/imports/definitions/merge_language"
+                  }
+                ]
+              }
 		        },
+
 		        "required": [
-		          "from_email",
-		          "to_email",
-		          "subject"
+              "to_email",
+              "subject"
 		        ],
 		        "disposition": [
-		          "from_email",
 		          "to_email",
 		          "subject",
-		          "username",
-		          "last_mame",
-		          "email",
-		          "cc_address",
-		          "bcc_address"
-		        ]
+		          "merge_vars",
+              "merge_language"
+		        ],
+            "definitions": {
+              "merge_language": {
+                "description": "Merge Language",
+                "enum": [
+                  "mailchimp",
+                  "handlebars"
+                ],
+                "enum_label": [
+                  "MailChimp",
+                  "Handlebars"
+                ],
+                "default": "handlebars"
+              }
+            }
 		      }
 		    },
     "send": {

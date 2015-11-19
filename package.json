@@ -1,6 +1,6 @@
 {
   "name": "bip-pod-mandrill",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "mandrill Pod for Bipio",
   "keywords": [
     "bip",
@@ -22,7 +22,9 @@
     }
   ],
   "main": ".",
-  "dependencies": {},
+  "dependencies": {
+    "csv": "^0.4.6"
+  },
   "engines": {
     "node": ">= 0.10.0"
   }
