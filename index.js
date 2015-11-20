@@ -21,5 +21,29 @@
 var Pod = require('bip-pod'),
     Mandrill = new Pod();
 
+Mandrill.rpc = function(action, method, sysImports, options, channel, req, res) {
+  var self = this;
+
+  if (method == 'templates_list') {
+
+  	this._httpPost(
+  		  'https://mandrillapp.com/api/1.0/templates/list.json',
+  		  {
+  		  	key : sysImports.auth.issuer_token.password
+  		  },
+  		  function(err, resp) {
+  		  	if (err) {
+  		  		res.status(500).send(err);
+  		  	} else {
+  		  		res.status(200).send(resp);
+  		  	}
+  		  }
+		);
+
+  } else {
+    this.__proto__.rpc.apply(this, arguments);
+  }
+}
+
 // -----------------------------------------------------------------------------
 module.exports = Mandrill;

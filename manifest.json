@@ -14,7 +14,12 @@
       }
     }
   },
-  "rpcs": {},
+  "rpcs": {
+    "templates_list" : {
+      "contentType" : "application/json",
+      "title" : "My Templates"
+    }
+  },
   "actions": {
 		  "send_template": {
 		      "title": "Send a Template Email",
@@ -30,12 +35,16 @@
 		          "from_name": {
 		            "type": "string",
 		            "title": "From Name"
-		          }
-		          ,
-		          "template_name": {
-		            "type": "string",
-		            "title": "Template Name"
 		          },
+              "template_name" : {
+                "type" : "string",
+                "title" : "Template Name",
+                "oneOf" : [
+                  {
+                    "$ref": "/rpcs/templates_list#{name}"
+                  }
+                ]
+              },
               "merge_language" : {
                 "type" : "string",
                 "title" : "Merge Language",
