@@ -26,19 +26,12 @@ Mandrill.rpc = function(action, method, sysImports, options, channel, req, res) 
 
   if (method == 'templates_list') {
 
-  	this._httpPost(
-  		  'https://mandrillapp.com/api/1.0/templates/list.json',
-  		  {
-  		  	key : sysImports.auth.issuer_token.password
-  		  },
-  		  function(err, resp) {
-  		  	if (err) {
-  		  		res.status(500).send(err);
-  		  	} else {
-  		  		res.status(200).send(resp);
-  		  	}
-  		  }
-		);
+    this._httpPost(
+      'https://mandrillapp.com/api/1.0/templates/list.json',
+      {
+        key : sysImports.auth.issuer_token.password
+      }
+    ).pipe(res);
 
   } else {
     this.__proto__.rpc.apply(this, arguments);
