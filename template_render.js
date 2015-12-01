@@ -27,9 +27,7 @@ function TemplateRender(podConfig) {
 TemplateRender.prototype = {};
 
 TemplateRender.prototype.render = function(struct, next) {
-  this.$resource._httpPost('https://mandrillapp.com/api/1.0/templates/render.json', struct, function(err, resp) {
-    next(err, resp);
-  });
+  this.pod.POST('templates/render.json', struct, next);
 }
 
 TemplateRender.prototype.invoke = function(imports, channel, sysImports, contentParts, next) {

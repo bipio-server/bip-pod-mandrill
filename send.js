@@ -37,12 +37,6 @@ function unpackAddresses(addrs, type, ptr) {
   }
 }
 
-Send.prototype.send = function(struct, next) {
-  this.$resource._httpPost('https://mandrillapp.com/api/1.0/messages/send.json', struct, function(err, resp) {
-    next(err, resp);
-  });
-}
-
 Send.prototype.invoke = function(imports, channel, sysImports, contentParts, next) {
   var f,
     self = this,
@@ -67,7 +61,7 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
   unpackAddresses(imports.cc_address, 'cc', struct.message.to);
   unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
 
-  this.send(struct, next);
+  this.pod.POST('messages/send.json', struct, next);
   return;
 
   // @todo file uploads
@@ -92,7 +86,7 @@ Send.prototype.invoke = function(imports, channel, sysImports, contentParts, nex
     });
 
   } else {
-    this.send(struct, next);
+    this.pod.POST('messages/send.json', struct, next);
   }
 
 

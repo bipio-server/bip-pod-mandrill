@@ -21,6 +21,18 @@
 var Pod = require('bip-pod'),
     Mandrill = new Pod();
 
+Mandrill.POST = function(path, struct, next) {
+  this.$resource._httpPost('https://mandrillapp.com/api/1.0/' + path, struct, function(err, resp) {
+    if (resp && resp.length) {
+      resp = resp.shift();
+    }
+    if (!err && resp && resp.status === 'invalid') {
+      err = resp.reject_reason || (resp.status + " (No Reason Given)" );
+    }
+    next(err, resp);
+  });
+}
+
 Mandrill.rpc = function(action, method, sysImports, options, channel, req, res) {
   var self = this;
 

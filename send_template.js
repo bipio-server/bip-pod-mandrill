@@ -18,7 +18,6 @@
  */
 
 // @see https://mandrillapp.com/api/docs/messages.JSON.html#method=send-template
-
 var csv = require('csv');
 
 function SendTemplate(podConfig) {
@@ -26,8 +25,6 @@ function SendTemplate(podConfig) {
 
 SendTemplate.prototype = {};
 
-/*
- * disabled - now UI for cc/bcc merge_vers mapping
 function unpackAddresses(addrs, type, ptr) {
   if (addrs) {
     var addrs = addrs.split(' ');
@@ -39,11 +36,9 @@ function unpackAddresses(addrs, type, ptr) {
     }
   }
 }
-*/
+
 SendTemplate.prototype.send = function(struct, next) {
-  this.$resource._httpPost('https://mandrillapp.com/api/1.0/messages/send-template.json', struct, function(err, resp) {
-    next(err, resp);
-  });
+  this.pod.POST('messages/send-template.json', struct, next);
 }
 
 SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentParts, next) {
@@ -53,12 +48,13 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
     struct = {
       key : sysImports.auth.issuer_token.password,
       template_name: imports.template_name,
-      template_content:[{
-    	  name: imports.subject,
-    	  content: ""
-    		  }],
+      template_content : [
+        {
+      	  name: imports.subject,
+      	  content: ""
+    		}
+      ],
       message : {
-        html : "",
         merge_language : imports.merge_language,
         global_merge_vars:[],
         subject : imports.subject,
@@ -69,12 +65,33 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
             email : imports.to_email,
             type : "to"
           }
-        ]
+        ],
+        important : imports.important,
+        track_opens : imports.track_opens,
+        track_clicks : imports.track_clicks,
+        auto_text : imports.auto_text,
+        auto_html : imports.auto_html,
+        inline_css : imports.inline_css,
+        url_strip_qs : imports.url_strip_qs,
+        preserve_recipients : imports.preserve_recipients,
+        view_content_link : imports.view_content_link,
+        tracking_domain : imports.tracking_domain,
+        signing_domain : imports.signing_domain,
+        return_path_domain : imports.return_path_domain,
+        ip_pool : imports.ip_pool,
+        send_at : imports.send_at
       }
     };
 
-  //unpackAddresses(imports.cc_address, 'cc', struct.message.to);
-  //unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
+  unpackAddresses(imports.cc_address, 'cc', struct.message.to);
+  unpackAddresses(imports.bcc_address, 'bcc', struct.message.to);
+
+  // strip undefined fields form message
+  for (var k in struct.message) {
+    if (undefined === struct.message[k]) {
+      delete struct.message[k];
+    }
+  }
 
   if (imports.merge_vars) {
 
@@ -95,8 +112,6 @@ SendTemplate.prototype.invoke = function(imports, channel, sysImports, contentPa
             }
           );
         }
-
-//        console.log(struct.message.global_merge_vars);
 
         self.send(struct, next);
       }

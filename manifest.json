@@ -53,6 +53,53 @@
                     "$ref" : "#/imports/definitions/merge_language"
                   }
                 ]
+              },
+              "important" : {
+                "type" : "boolean",
+                "title" : "Important",
+                "default" : false
+              },
+              "track_opens" : {
+                "type" : "boolean",
+                "title" : "Track Opens",
+                "default" : true
+              },
+              "track_clicks" : {
+                "type" : "boolean",
+                "title" : "Track Clicks",
+                "default" : true
+              },
+              "auto_text" : {
+                "type" : "boolean",
+                "title" : "Auto Text",
+                "default" : false
+              },
+              "auto_html" : {
+                "type" : "boolean",
+                "title" : "Auto HTML",
+                "default" : false
+              },
+              "inline_css" : {
+                "type" : "boolean",
+                "title" : "Inline CSS",
+                "description" : "Only for HTML documents less than 256KB in size",
+                "default" : false
+              },
+              "url_strip_qs" : {
+                "type" : "boolean",
+                "title" : "Strip Query Strings",
+                "description" : "Strip the query string from URLs when aggregating tracked URL data",
+                "default" : false
+              },
+              "preserve_recipients" : {
+                "type" : "boolean",
+                "title" : "Preserve Recipients",
+                "default" : false
+              },
+              "view_content_link" : {
+                "type" : "boolean",
+                "title" : "View Content Link",
+                "default" : false
               }
 		        },
 		        "required": [
@@ -65,7 +112,16 @@
 		          "from_email",
 		          "from_name",
               "template_name",
-              "merge_language"
+              "merge_language",
+              "important",
+              "track_opens",
+              "track_clicks",
+              "auto_text",
+              "auto_html",
+              "inline_css",
+              "url_strip_qs",
+              "preserve_recipients",
+              "view_content_link"
 		        ]
 		      },
 		      "exports": {
@@ -98,6 +154,16 @@
 		            "type": "string",
 		            "title": "Subject"
 		          },
+              "cc_address": {
+                "type": "string",
+                "title": "Cc",
+                "description" : "Space Separated, eg: test@example.org joe@bloggs.com"
+              },
+              "bcc_address": {
+                "type": "string",
+                "title": "Bcc",
+                "description" : "Space Separated, eg: test@example.org joe@bloggs.com"
+              },
 		          "merge_vars": {
 		            "type": "string",
 		            "title": "Merge Variables",
@@ -111,6 +177,27 @@
                     "$ref" : "#/imports/definitions/merge_language"
                   }
                 ]
+              },
+              "tracking_domain" : {
+                "type" : "string",
+                "title" : "Tracking Domain"
+              },
+              "signing_domain" : {
+                "type" : "string",
+                "title" : "Signing Domain"
+              },
+              "return_path_domain" : {
+                "type" : "string",
+                "title" : "Return Path Domain"
+              },
+              "ip_pool" : {
+                "type" : "string",
+                "title" : "IP Pool"
+              },
+              "send_at" : {
+                "type" : "string",
+                "title" : "Send At",
+                "description" : "UTC timestamp in YYYY-MM-DD HH:MM:SS format"
               }
 		        },
 
@@ -122,7 +209,14 @@
 		          "to_email",
 		          "subject",
 		          "merge_vars",
-              "merge_language"
+              "merge_language",
+              "cc_address",
+              "bcc_address",
+              "tracking_domain",
+              "signing_domain",
+              "return_path_domain",
+              "ip_pool",
+              "send_at"
 		        ],
             "definitions": {
               "merge_language": {
@@ -215,7 +309,7 @@
           "from_email",
           "to_email"
         ],
-        "disposition": [
+        "disposition" : [
           "from_email",
           "to_email",
           "cc_address",
