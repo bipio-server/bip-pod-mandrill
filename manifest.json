@@ -225,6 +225,67 @@
           "html"
         ]
       }
+    },
+    "template_render": {
+      "title": "Render A Template",
+      "description": "Renders A Template Editable Area Using MailChimp Merge Language",
+      "doc_ref": "https://mandrillapp.com/api/docs/templates.JSON.html#method=render",
+      "trigger": "invoke",
+      "config": {
+        "properties": {
+          "template_name" : {
+            "type" : "string",
+            "title" : "Template Name",
+            "oneOf" : [
+              {
+                "$ref": "/rpcs/templates_list#{name}"
+              }
+            ]
+          }
+        },
+        "required": [
+          "template_name"
+        ],
+        "disposition": [
+          "template_name"
+        ]
+      },
+      "exports": {
+        "properties": {
+          "html": {
+            "type": "string",
+            "title": "Rendered HTML Template"
+          }
+        }
+      },
+      "imports": {
+        "properties": {
+          "template_content" : {
+            "type" : "string",
+            "title" : "Editable Area Content",
+            "description" : "<a href=\"http://kb.mailchimp.com/merge-tags/all-the-merge-tags-cheat-sheet\">MailChimp Merge Language Cheat Sheet</a>"
+          },
+          "editable_name" : {
+            "type" : "string",
+            "title" : "Editable Area Name",
+            "description" : "<a href=\"http://templates.mailchimp.com/getting-started/template-language/\">Creating Editable Areas</a>",
+            "default" : "editable"
+          },
+          "merge_vars": {
+            "type": "string",
+            "title": "Merge Variables",
+            "description" : "Comma Separated, eg: name=joe,company=big-co"
+          }
+        },
+
+        "required": [
+        ],
+        "disposition": [
+          "editable_name",
+          "template_content",
+          "merge_vars"
+        ]
+      }
     }
   }
 }

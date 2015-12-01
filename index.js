@@ -30,8 +30,15 @@ Mandrill.rpc = function(action, method, sysImports, options, channel, req, res) 
       'https://mandrillapp.com/api/1.0/templates/list.json',
       {
         key : sysImports.auth.issuer_token.password
+      },
+      function(err, body) {
+        if (err) {
+          res.status(500).end();
+        } else {
+          res.send(body);
+        }
       }
-    ).pipe(res);
+    );
 
   } else {
     this.__proto__.rpc.apply(this, arguments);
